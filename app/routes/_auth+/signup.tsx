@@ -183,6 +183,14 @@ export default function SignupRoute() {
 					Submit
 				</Button>
 			</Form>
+			<br />
+			<div className="mt-8 flex flex-col items-center justify-center">
+				<Form action="/auth/google" method="post">
+					<Button size="sm" variant="primary">
+						Login with Google
+					</Button>
+				</Form>
+			</div>
 		</div>
 	)
 }

@@ -6,6 +6,7 @@ import invariant from 'tiny-invariant'
 import { prisma } from '~/utils/db.server.ts'
 import { sessionStorage } from './session.server.ts'
 import { redirect } from '@remix-run/node'
+import { GoogleStrategy } from 'remix-auth-google'
 
 export type { User }
 
@@ -172,3 +173,24 @@ export async function verifyLogin(
 
 	return { id: userWithPassword.id }
 }
+
+
+
+const googleStrategy =
+	process.env.GOOGLE_CLIENT_ID &&
+	process.env.GOOGLE_CLIENT_SECRET &&
+	new GoogleStrategy<string>(
+		{
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: `${process.env.SERVER_URL}/auth/google/callback`,
+		},
+		async ({ accessToken, refreshToken, extraParams, profile }) => {
+			// Get the user data from your DB or API using the tokens and profile
+			// return User.findOrCreate({ email: profile.emails[0].value });
+			console.log('profile', profile)
+			return {}
+		},
+	)
+console.log({ googleStrategy })
+googleStrategy && authenticator.use(googleStrategy)
